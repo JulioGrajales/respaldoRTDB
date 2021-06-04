@@ -389,3 +389,16 @@ Inversiones caviza  (es un grupo inmobiliario) tiene a sus asesores de venta, en
 
 
 Invertikal no puede ver los numero ni comentarios que hace los brokers de inversiones caviza.
+
+# Docker-compose
+docker-compose up
+docker-compose down
+
+# Logs de docker
+docker logs -f container_id
+
+# Acceder al sistema
+docker exec -ti container_id bash
+
+# Mongoexpress
+localhost:8081
