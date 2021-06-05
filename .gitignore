@@ -1,2 +1,14 @@
+.DS_Store
+node_modules/
+newrelic_agent.log
+dist/
+npm-debug.log
+yarn-error.log
+.env
+package-lock.json
+tests/functional/unit-test-report.xml
+tests/functional/eslint.json
+coverage
+data
+.vscode
 .dev
-node_modules

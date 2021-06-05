@@ -5,7 +5,6 @@ services:
     image: mongo:4.4.6-bionic
     container_name: mongodb
     #command: --bind_ip 0.0.0.0
-    #network_mode: "host"
     ports:
       - 27017:27017
     networks:
@@ -13,8 +12,14 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: capital28_dev
     volumes:
-      - ./.dev/mongo-db/data:/data/db
+      # mongo initialize startup activities and restore task
+      - ./.dev/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/
+      # volume with db files
+      - ./.dev/dbs:/dbs/
+      # volume with mongo db data
+      - ./.dev/mongo-db/data:/data/db/
 
   mongo-express:
     image: mongo-express

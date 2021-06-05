@@ -1,3 +1,15 @@
 .dev
 .gitignore
-capital28_dev_02_02_2021.gz
+.git/
+node_modules/
+.DS_Store
+newrelic_agent.log
+dist/
+npm-debug.log
+yarn-error.log
+.env
+tests/functional/unit-test-report.xml
+tests/functional/eslint.json
+coverage
+data
+.vscode
