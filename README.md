@@ -1,5 +1,5 @@
 
-# Realtime Db
+# Realtime DB Project
 
 El objetivo del proyecto es implementar lo necesario de forma que podamos tener una base de datos en tiempo real, similar a lo que tiene Firebase de forma nativa. 
 
@@ -10,7 +10,7 @@ Para este proyecto se tiene que estudiar mongodb y express junto Socket IO de ig
 
 En sí lo que queremos es una funcionalidad que esté escuchando los cambios que se realicen en la db y este lo regrese. Inicialmente lo implementarán con los Prospectos (Leads) para que más adelante podamos monitorear los demás datos.
 
-# Estructura de un Lead
+## Estructura de un Lead
 ```
 {
     "_id" : ObjectId("608ca3cda4a4b20011ab4339"),
@@ -69,69 +69,69 @@ En sí lo que queremos es una funcionalidad que esté escuchando los cambios que
 
 Les explicaré los datos más importantes y con los que trabajaran más, ya que los demás se dan por entender por si solos, ejemplo:
 
-contact_lead_name: nombre del prospecto
+| contact_lead_name | nombre del prospecto |
 
-budget y currency : Precio y tipo de moneda
+| budget y currency | precio y tipo de moneda |
 
-postponed : este parámetro indica cuando un lead se pospuso.
+| postponed | este parámetro indica cuando un lead se pospuso |
 
-reviewed: Indica cuando el contacto al que se asignó lo revisa por primera vez aquí calculamos la inmediatez del vendedor.
+| reviewed | indica cuando el contacto al que se asignó lo revisa por primera vez aquí calculamos la inmediatez del vendedor |
 
-phase, operation_phase y tracking_phase : Controlan los estados de las fases
+| phase, operation_phase y tracking_phase | controlan los estados de las fases |
 
-phase: active, in-operation, discarded y finished.
+| phase | active, in-operation, discarded y finished |
 
-tracking_phase :
+> tracking_phase :
 
-   1- unassigned - Por asignar,
+   1. unassigned - Por asignar
 
-   2- assigned - Asignado,
+   2. assigned - Asignado
 
-   3- to-contact - Por contactar,
+   3. to-contact - Por contactar
 
-   4- searching - Busqueda,
+   4. searching - Búsqueda
 
-   5- tracking - Seguimiento
+   5. tracking - Seguimiento
 
-   6- scheduled-tour - Recorrido agendado,
+   6. scheduled-tour - Recorrido agendado
 
-   7- finished-tour - Recorrido Finalizado,
+   7. finished-tour - Recorrido finalizado
 
-   8- offer - Ofertando,
+   8. offer - Ofertando
 
-   9- downpayment - Fecha de Apartado
+   9. downpayment - Fecha de apartado
 
-operation_phase:
+> operation_phase:
 
-   1- contract - Contratos,
+   1. contract - Contratos
 
-   2- closing-trade - Fecha de cierre
+   2. closing-trade - Fecha de cierre
 
-Las fases trabajan de la siguiente manera:
+> Las fases trabajan de la siguiente manera:
 
-Prospecto: 
+**Prospecto:**
 
-phase: active, tracking_phase: la fase del 1 al 9 en ingles. operation_phase: "" (un string vacio) 
+**phase:** active, tracking_phase: la fase del 1 al 9 en ingles. operation_phase: "" (un string vacio) 
 
-Compra,contrato,acuerdo : 
+**Compra,contrato,acuerdo:**
 
-phase: in-operation, tracking_phase: "" (string vacio) operation_phase: la fase seleccion del 1 al 2 
+**phase:** in-operation, tracking_phase: "" (string vacio) operation_phase: la fase seleccion del 1 al 2 
 
-Cerrar prospecto con compra, contrato, etc.. 
+**Cerrar prospecto con compra, contrato, etc.:**
 
-phase: finished, tracking_phase: "" (string vacio), operation_phase: "" (string vacio)
+**phase:** finished, tracking_phase: "" (string vacio), operation_phase: "" (string vacio)
 
-contact: De donde nos está contactando el prospecto, usamos algunas plataformas para sincronizar información que entren por Facebook, Instagram algunas plataformas como Inmubles24, vivanuncion, … Se guardan el parámetro how_did_contact_us
+**contact:** de donde nos está contactando el prospecto, usamos algunas plataformas para sincronizar información que entren por Facebook, Instagram algunas plataformas como Inmubles24, vivanuncios, … Se guardan en el parámetro how_did_contact_us
 
-real_estate_group_id: Inmobiliaria a la que pertenece.
+**real_estate_group_id:** Inmobiliaria a la que pertenece.
 
-contact_broker_id: Broker o Admin al que está asignado el prospecto.
+**contact_broker_id:** Broker o Admin al que está asignado el prospecto.
 
-comments: Aquí es donde se agregan los comentarios, igual se pueden agregar imágenes o audio.
+**comments:** Aquí es donde se agregan los comentarios, igual se pueden agregar imágenes o audio.
 
 Estos son los parámetros con los que va a estar trabajando.
 
-# Modelo del Lead
+## Modelo del Lead
 Así está estructurado el modelo (Lo van a utilizar):
 ```
 const mongoose = require('mongoose');
@@ -301,7 +301,7 @@ const leadSchema = new Schema({
 
 module.exports = mongoose.model('leads', leadSchema);
 ```
-# Socket
+## Socket
 Y en si la idea es la siguiente: 
 ```
 const socket_io = require('socket.io');
@@ -323,46 +323,42 @@ io.on('connection', function () {
 var socket = io;
 module.exports = socket;
 ```
-# End-Point a simular
+## End-Point a simular
 En esta parte les pondremos algunos end-point para que revisen y puedan estructurar la información como queremos que lo traigan, ya que se utilizarán en web y móviles:
 
 
-Stats
+**Stats**
 
 https://dev.api.capital28.investments/api/lead/stats
 
-Descripción:
+**Descripción**
 
-Esta api muestra la cantidad de lead que se encuentran en una fase o bien en algún “estado”, por ejemplo:
+Esta API muestra la cantidad de lead que se encuentran en una fase o bien en algún “estado”, por ejemplo:
 
-Una fase puede ser una de las que se mencionó anteriormente :
-unassigned - Por asignar,	
-assigned - Asignado,
-to-contact - Por contactar,
-searching - Busqueda,
-tracking - Seguimiento
-scheduled-tour - Recorrido agendado,
-finished-tour - Recorrido Finalizado,
-offer - Ofertando,
-downpayment - Fecha de Apartado
+**Una fase puede ser una de las que se mencionó anteriormente**
+
+| unassigned | Por asignar |
+| assigned | Asignado |
+| to-contact | Por contactar |
+| searching | Busqueda |
+| tracking | Seguimiento |
+| scheduled-tour | Recorrido agendado |
+| finished-tour | Recorrido Finalizado |
+| offer | Ofertando |
+| downpayment | Fecha de Apartado |
 
 Un “estado” tiene que ver con las acciones que no se le han hecho o se le han hecho a un lead, cómo no no darle seguimiento, no haberle comentado, etc etc, el único ejemplo para este es una que se llama “Sin seguimiento” ese dato también viene en esta api.
 
 
-Esta api, también funciona filtrando los leads por usuario, por ejemplo:
+**Esta api, también funciona filtrando los leads por usuario, por ejemplo:**
 Si le paso un token que es de un broker, me traerá la cantidad de leads que tiene dicho broker, supongamos que maría y juan hacen una consulta y esa api trae los leads por cada fase.
 
 En caso de ser un admin, él puede ver todos los leads, tanto como los de él, los de maría y los de juan, siempre y cuando pertenezcan al mismo grupo.
 
-Un ejemplo de cómo se usa en la app:
-
-
-
+**Un ejemplo de cómo se usa en la app:**
 
 
 Entonces, para que un broker/Admin se entere que hay un cambio en esos kpis, actualmente tiene que refrescar la vista, y el objetivo es que cada que un lead cambie de fase, esos numeros se cambien por si solo.
-
-
 
 
 Les paso nuevamente un token para que puedan consultar:
@@ -370,11 +366,7 @@ Les paso nuevamente un token para que puedan consultar:
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZGIzMTFiOTVkNzM1NzA0NjYyNzRhYTYiLCJuYW1lIjoiVGVzdCBBZG1pbiIsImNvbnRhY3RfaWQiOiI1ZGIzMTFkZDBhMjNmMTJhNGYwNjk2YjMiLCJvcmlnaW4iOiIiLCJyb2xlIjoiYWRtaW4iLCJhY2Nlc3NfZ3JvdXAiOiI1ZTlhMmRmMDI0NTM1NjQ5YmRjNTFmNTQiLCJpYXQiOjE1OTkwNjg1NDR9.tSsp6BT2hWyd-bwGiRR29cLJGJHrSzVHGsrFFnkoSAE
 ```
 
-
-
-
-
-Last comments
+### Last comments
 
 
 https://dev.api.capital28.investments/api/manifest/getLastCommentsLeads
@@ -387,23 +379,102 @@ Invertikal (es un grupo inmobiliario) tiene a sus asesores de venta, entre ellos
 
 Inversiones caviza  (es un grupo inmobiliario) tiene a sus asesores de venta, entre ellos puede haber un desarrollador, broker y un administrador, 
 
-
 Invertikal no puede ver los numero ni comentarios que hace los brokers de inversiones caviza.
 
-# Docker-compose
+## Development Environment with Docker
 
-docker-compose up
+### docker-compose
 
+Para ejecutar el stack de servicios (mongo, mongo-express, nodejs, etc.) tenemos que hacerlo vía docker-compose. Desde la raíz de nuestro proyecto (donde está situado el archivo docker-compose.yaml) ejecutamos:
+Usamos la opción -d para ejecutar en modo desacoplado.
+
+Levantar el stack:
+```sh
+docker-compose up -d
+```
+
+Dar de baja el stack:
+```sh
 docker-compose down
+```
 
-# Logs de docker
+Es importante dar de baja el stack una vez que terminemos de trabajar para no utilizar recursos innecesariamente. Cuidemos el planeta!
 
-docker logs -f container_id
+### docker-ps y logs
 
-# Acceder al sistema
+Si queremos verificar los contenedores que docker está corriendo actualmente, ejecutamos:
 
-docker exec -ti container_id bash
+```sh
+docker ps
+```
 
-# Mongoexpress
+En caso de querer visualizar los logs de algún container ejecutamos:
+Usamos la opción -f (follow) para obtener logs en tiempo real.
 
+```sh
+docker-logs -f container-id
+```
+
+### docker run
+
+Cuando no tenemos un ambiente de nodejs prefabricado tal vez queramos ejecutar npm init para iniciar un archivo package.json, para esto necesitamos poder ejecutar comandos de npm y compartir nuestra carpeta actual de manera que todo lo que realicemos en el container quede registrado en nuestro directorio para esto tenemos que hacer un 'bind volumen' entre nuestro equipo y el container.
+En Linux/Mac el proceso es transparente para referenciar directorios y un simple $(PWD) funciona.
+En Windows usaremos la variable de entorno %cd% para referenciar la ruta actual del directorio. 
+Nuestros comandos quedarían de la siguiente forma:
+
+Windows
+```sh
+cd path/to/git/projects/current-project
+docker run --rm -ti -v %cd%:/srv/app node:14-alpine3.13 sh
+```
+
+Linux/Mac
+```sh
+cd path/to/git/projects/current-project
+docker run --rm -ti -v $(PWD):/srv/app node:14-alpine3.13 sh
+```
+
+```sh
+cd path/to/git/projects/real-time-db
+docker run --rm -ti -v pwd:/srv/app node:14-alpine3.13 sh
+```
+
+
+### docker exec
+
+Para acceder a un contenedor corriendo no podemos ejecutar docker run ya que nuestro contenedor ya está corriendo, en su lugar lo hacemos con docker-exec mediante el siguiente comando:
+
+```sh
+docker exec -ti container-id sh
+```
+
+### mongo-express
+
+Desde el navegador para entrar a mongo-express, escribimos:
+
+```
 localhost:8081
+```
+
+### Robo3T
+Podemos usa [Robo3T](https://robomongo.org/) una GUI para visualizar los datos de nuestra DB y usar la línea de comando de Mongo.
+Abajo encontraremos la configuración básica para conectarnos a la base de datos de MongoDB en ambiente de docker vía Robo3T.
+
+Abrimos el apartado de conexiones, y damos click en Crear, y colocamos la configuración como se muestra abajo. 
+> Importante: si llegamos a instalar mongo y node, hay que desinstalar mongo y de paso también node para que no interfiera en este nuevo esquema de docker; también es válido desactivarlos por completo
+
+1. Pestaña de Connection:
+
+![](./docs/connection.png)
+
+2. Pestaña de Authentication:
+
+![](./docs/authentication.png)
+
+3. Damos click en 'Test' y deberemos ver en verde las pruebas:
+
+![](./docs/success_test.png)
+
+4. Ejemplo de como se visualiza a la hora de conectarse al mongo. En este caso solo tenemos una base de datos llamada 'capital28_dev':
+
+![](./docs/collection_tree.png)
