@@ -72,15 +72,10 @@ Les explicaré los datos más importantes y con los que trabajaran más, ya que 
 | Dato | Descripción |
 | ------ | ------ |
 | contact_lead_name | nombre del prospecto |
-
 | budget y currency | precio y tipo de moneda |
-
 | postponed | este parámetro indica cuando un lead se pospuso |
-
 | reviewed | indica cuando el contacto al que se asignó lo revisa por primera vez aquí calculamos la inmediatez del vendedor |
-
 | phase, operation_phase y tracking_phase | controlan los estados de las fases |
-
 | phase | active, in-operation, discarded y finished |
 
 > tracking_phase :
@@ -306,7 +301,8 @@ module.exports = mongoose.model('leads', leadSchema);
 ```
 
 ## Socket
-Y en si la idea es la siguiente: 
+Y en si la idea es la siguiente:
+
 ```js
 const socket_io = require('socket.io');
 var io = socket_io();
@@ -355,7 +351,6 @@ Una fase puede ser una de las que se mencionó anteriormente:
 | downpayment | Fecha de Apartado |
 
 Un **“estado”** tiene que ver con las acciones que no se le han hecho o se le han hecho a un lead, cómo no no darle seguimiento, no haberle comentado, etc etc, el único ejemplo para este es una que se llama “Sin seguimiento” ese dato también viene en esta api.
-
 
 Esta api, también funciona **filtrando** los leads por usuario, por ejemplo:
 Si le paso un token que es de un broker, me traerá la cantidad de leads que tiene dicho broker, supongamos que maría y juan hacen una consulta y esa api trae los leads por cada fase.
