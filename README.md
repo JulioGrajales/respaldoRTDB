@@ -400,7 +400,7 @@ docker-compose down
 
 Es importante dar de baja el stack una vez que terminemos de trabajar para no utilizar recursos innecesariamente. Cuidemos el planeta!
 
-### docker-ps y logs
+### docker active containers y logs
 
 Si queremos verificar los contenedores que docker está corriendo actualmente, ejecutamos:
 
@@ -412,15 +412,15 @@ En caso de querer visualizar los logs de algún container ejecutamos:
 Usamos la opción -f (follow) para obtener logs en tiempo real.
 
 ```sh
-docker-logs -f container-id
+docker logs -f container-id
 ```
 
 ### docker run
 
-Cuando no tenemos un ambiente de nodejs prefabricado tal vez queramos ejecutar npm init para iniciar un archivo package.json, para esto necesitamos poder ejecutar comandos de npm y compartir nuestra carpeta actual de manera que todo lo que realicemos en el container quede registrado en nuestro directorio para esto tenemos que hacer un 'bind volumen' entre nuestro equipo y el container.
+Cuando no tenemos un ambiente de nodejs prefabricado tal vez queramos ejecutar npm init para iniciar un archivo package.json, para esto necesitamos poder ejecutar comandos de npm y compartir nuestra carpeta actual de manera que todo lo que realicemos en el container quede registrado en nuestro directorio para esto tenemos que hacer un **bind volumen** entre nuestro equipo y el container.
 
-En Linux/Mac el comando para referenciar el directorio actual es $(PWD).
-En Windows usaremos la variable de entorno %cd% para referenciar la ruta actual del directorio. 
+En Linux/Mac el comando para referenciar el directorio actual es *$(PWD)*.
+En Windows usaremos la variable de entorno *%cd%* para referenciar la ruta actual del directorio. 
 Nuestros comandos quedarían de la siguiente forma:
 
 Windows:
