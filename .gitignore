@@ -11,4 +11,4 @@ tests/functional/eslint.json
 coverage
 data
 .vscode
-.dev
+.dev/data/

@@ -19,7 +19,7 @@ services:
       # volume with db files
       - ./.dev/dbs:/dbs/
       # volume with mongo db data
-      - ./.dev/mongo-db/data:/data/db/
+      - ./.dev/data/mongo-db/data:/data/db/
 
   mongo-express:
     image: mongo-express
