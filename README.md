@@ -327,16 +327,18 @@ module.exports = socket;
 En esta parte les pondremos algunos end-point para que revisen y puedan estructurar la información como queremos que lo traigan, ya que se utilizarán en web y móviles:
 
 
-**Stats**
+### Stats
 
 https://dev.api.capital28.investments/api/lead/stats
 
-**Descripción**
+Descripción:
 
 Esta API muestra la cantidad de lead que se encuentran en una fase o bien en algún “estado”, por ejemplo:
 
-**Una fase puede ser una de las que se mencionó anteriormente**
+Una fase puede ser una de las que se mencionó anteriormente:
 
+| Fase | Descripción |
+| ------ | ------ |
 | unassigned | Por asignar |
 | assigned | Asignado |
 | to-contact | Por contactar |
@@ -418,31 +420,26 @@ docker-logs -f container-id
 ### docker run
 
 Cuando no tenemos un ambiente de nodejs prefabricado tal vez queramos ejecutar npm init para iniciar un archivo package.json, para esto necesitamos poder ejecutar comandos de npm y compartir nuestra carpeta actual de manera que todo lo que realicemos en el container quede registrado en nuestro directorio para esto tenemos que hacer un 'bind volumen' entre nuestro equipo y el container.
-En Linux/Mac el proceso es transparente para referenciar directorios y un simple $(PWD) funciona.
+
+En Linux/Mac el comando para referenciar el directorio actual es $(PWD).
 En Windows usaremos la variable de entorno %cd% para referenciar la ruta actual del directorio. 
 Nuestros comandos quedarían de la siguiente forma:
 
-Windows
+Windows:
 ```sh
 cd path/to/git/projects/current-project
 docker run --rm -ti -v %cd%:/srv/app node:14-alpine3.13 sh
 ```
 
-Linux/Mac
+Linux/Mac:
 ```sh
 cd path/to/git/projects/current-project
 docker run --rm -ti -v $(PWD):/srv/app node:14-alpine3.13 sh
 ```
 
-```sh
-cd path/to/git/projects/real-time-db
-docker run --rm -ti -v pwd:/srv/app node:14-alpine3.13 sh
-```
-
-
 ### docker exec
 
-Para acceder a un contenedor corriendo no podemos ejecutar docker run ya que nuestro contenedor ya está corriendo, en su lugar lo hacemos con docker-exec mediante el siguiente comando:
+Para acceder a un contenedor corriendo no podemos ejecutar docker run ya que nuestro contenedor ya está corriendo, en su lugar lo hacemos vía docker exec mediante el siguiente comando:
 
 ```sh
 docker exec -ti container-id sh
@@ -475,6 +472,6 @@ Abrimos el apartado de conexiones, y damos click en Crear, y colocamos la config
 
 ![](./docs/success_test.png)
 
-4. Ejemplo de como se visualiza a la hora de conectarse al mongo. En este caso solo tenemos una base de datos llamada 'capital28_dev':
+4. Ejemplo de como se visualiza a la hora de conectarse al mongo. En este caso vemos una base de datos llamada 'capital28_dev':
 
 ![](./docs/collection_tree.png)
