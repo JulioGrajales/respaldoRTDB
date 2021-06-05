@@ -11,7 +11,7 @@ Para este proyecto se tiene que estudiar mongodb y express junto Socket IO de ig
 En sí lo que queremos es una funcionalidad que esté escuchando los cambios que se realicen en la db y este lo regrese. Inicialmente lo implementarán con los Prospectos (Leads) para que más adelante podamos monitorear los demás datos.
 
 ## Estructura de un Lead
-```
+```json
 {
     "_id" : ObjectId("608ca3cda4a4b20011ab4339"),
     "postponed" : {
@@ -69,6 +69,8 @@ En sí lo que queremos es una funcionalidad que esté escuchando los cambios que
 
 Les explicaré los datos más importantes y con los que trabajaran más, ya que los demás se dan por entender por si solos, ejemplo:
 
+| Dato | Descripción |
+| ------ | ------ |
 | contact_lead_name | nombre del prospecto |
 
 | budget y currency | precio y tipo de moneda |
@@ -111,29 +113,30 @@ Les explicaré los datos más importantes y con los que trabajaran más, ya que 
 
 **Prospecto:**
 
-**phase:** active, tracking_phase: la fase del 1 al 9 en ingles. operation_phase: "" (un string vacio) 
+phase: active, tracking_phase: la fase del 1 al 9 en ingles. operation_phase: "" (un string vacio) 
 
 **Compra,contrato,acuerdo:**
 
-**phase:** in-operation, tracking_phase: "" (string vacio) operation_phase: la fase seleccion del 1 al 2 
+phase: in-operation, tracking_phase: "" (string vacio) operation_phase: la fase seleccion del 1 al 2 
 
-**Cerrar prospecto con compra, contrato, etc.:**
+**Cerrar prospecto con compra, contrato, etc. :**
 
-**phase:** finished, tracking_phase: "" (string vacio), operation_phase: "" (string vacio)
+phase: finished, tracking_phase: "" (string vacio), operation_phase: "" (string vacio)
 
-**contact:** de donde nos está contactando el prospecto, usamos algunas plataformas para sincronizar información que entren por Facebook, Instagram algunas plataformas como Inmubles24, vivanuncios, … Se guardan en el parámetro how_did_contact_us
+contact: de donde nos está contactando el prospecto, usamos algunas plataformas para sincronizar información que entren por Facebook, Instagram algunas plataformas como Inmubles24, vivanuncios, … Se guardan en el parámetro how_did_contact_us
 
-**real_estate_group_id:** Inmobiliaria a la que pertenece.
+real_estate_group_id: Inmobiliaria a la que pertenece.
 
-**contact_broker_id:** Broker o Admin al que está asignado el prospecto.
+contact_broker_id: Broker o Admin al que está asignado el prospecto.
 
-**comments:** Aquí es donde se agregan los comentarios, igual se pueden agregar imágenes o audio.
+comments: Aquí es donde se agregan los comentarios, igual se pueden agregar imágenes o audio.
 
 Estos son los parámetros con los que va a estar trabajando.
 
 ## Modelo del Lead
 Así está estructurado el modelo (Lo van a utilizar):
-```
+
+```js
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
@@ -301,9 +304,10 @@ const leadSchema = new Schema({
 
 module.exports = mongoose.model('leads', leadSchema);
 ```
+
 ## Socket
 Y en si la idea es la siguiente: 
-```
+```js
 const socket_io = require('socket.io');
 var io = socket_io();
 const User = require('../models/User');
@@ -323,6 +327,7 @@ io.on('connection', function () {
 var socket = io;
 module.exports = socket;
 ```
+
 ## End-Point a simular
 En esta parte les pondremos algunos end-point para que revisen y puedan estructurar la información como queremos que lo traigan, ya que se utilizarán en web y móviles:
 
@@ -331,7 +336,7 @@ En esta parte les pondremos algunos end-point para que revisen y puedan estructu
 
 https://dev.api.capital28.investments/api/lead/stats
 
-Descripción:
+#### Descripción:
 
 Esta API muestra la cantidad de lead que se encuentran en una fase o bien en algún “estado”, por ejemplo:
 
@@ -349,18 +354,17 @@ Una fase puede ser una de las que se mencionó anteriormente:
 | offer | Ofertando |
 | downpayment | Fecha de Apartado |
 
-Un “estado” tiene que ver con las acciones que no se le han hecho o se le han hecho a un lead, cómo no no darle seguimiento, no haberle comentado, etc etc, el único ejemplo para este es una que se llama “Sin seguimiento” ese dato también viene en esta api.
+Un **“estado”** tiene que ver con las acciones que no se le han hecho o se le han hecho a un lead, cómo no no darle seguimiento, no haberle comentado, etc etc, el único ejemplo para este es una que se llama “Sin seguimiento” ese dato también viene en esta api.
 
 
-**Esta api, también funciona filtrando los leads por usuario, por ejemplo:**
+Esta api, también funciona **filtrando** los leads por usuario, por ejemplo:
 Si le paso un token que es de un broker, me traerá la cantidad de leads que tiene dicho broker, supongamos que maría y juan hacen una consulta y esa api trae los leads por cada fase.
 
 En caso de ser un admin, él puede ver todos los leads, tanto como los de él, los de maría y los de juan, siempre y cuando pertenezcan al mismo grupo.
 
-**Un ejemplo de cómo se usa en la app:**
+Un ejemplo de cómo se usa en la app:
 
-
-Entonces, para que un broker/Admin se entere que hay un cambio en esos kpis, actualmente tiene que refrescar la vista, y el objetivo es que cada que un lead cambie de fase, esos numeros se cambien por si solo.
+Entonces, para que un broker/Admin se entere que hay un cambio en esos KPI's, actualmente tiene que refrescar la vista, y el objetivo es que cada que un lead cambie de fase, esos numeros se cambien por si solo.
 
 
 Les paso nuevamente un token para que puedan consultar:
