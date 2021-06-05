@@ -332,7 +332,6 @@ En esta parte les pondremos algunos end-point para que revisen y puedan estructu
 
 https://dev.api.capital28.investments/api/lead/stats
 
-#### Descripción:
 
 Esta API muestra la cantidad de lead que se encuentran en una fase o bien en algún “estado”, por ejemplo:
 
@@ -373,7 +372,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZGIzMTFiOTVkNzM1NzA0NjYyNzRhYTY
 https://dev.api.capital28.investments/api/manifest/getLastCommentsLeads
 
 
-Esta api es para obtener los comentarios recientes, aunque esta api mayormente va dirigida a los administradores o desarrolladores, de esta manera pueden ver cada comentario que sus brokers están realizando, recuerden que nustros usuarios se dividen por grupo inmobiliario, ejemplo:
+Esta API es para obtener los comentarios recientes, aunque esta api mayormente va dirigida a los administradores o desarrolladores, de esta manera pueden ver cada comentario que sus brokers están realizando, recuerden que nustros usuarios se dividen por grupo inmobiliario, ejemplo:
 
 
 Invertikal (es un grupo inmobiliario) tiene a sus asesores de venta, entre ellos puede haber un desarrollador, broker y un administrador, 
