@@ -420,6 +420,7 @@ docker logs -f container-id
 Cuando no tenemos un ambiente de nodejs prefabricado tal vez queramos ejecutar npm init para iniciar un archivo package.json, para esto necesitamos poder ejecutar comandos de npm y compartir nuestra carpeta actual de manera que todo lo que realicemos en el container quede registrado en nuestro directorio para esto tenemos que hacer un **bind volumen** entre nuestro equipo y el container.
 
 En Linux/Mac el comando para referenciar el directorio actual es *$(PWD)*
+
 En Windows usaremos la variable de entorno *%cd%* para referenciar la ruta actual del directorio. 
 Nuestros comandos quedarían de la siguiente forma:
 
@@ -428,12 +429,14 @@ Windows:
 ```sh
 cd path/to/git/projects/current-project
 docker run --rm -ti -v %cd%:/srv/app node:14-alpine3.13 sh
+npm init
 ```
 
 Linux/Mac:
 ```sh
 cd path/to/git/projects/current-project
 docker run --rm -ti -v $(PWD):/srv/app node:14-alpine3.13 sh
+npm init
 ```
 
 ### docker exec
