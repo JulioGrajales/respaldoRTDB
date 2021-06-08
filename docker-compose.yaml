@@ -12,14 +12,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
-      MONGO_INITDB_DATABASE: capital28_dev
     volumes:
-      # mongo initialize startup activities and restore task
-      - ./.dev/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/
-      # volume with db files
-      - ./.dev/dbs:/dbs/
-      # volume with mongo db data
-      - ./.dev/data/mongo-db/data:/data/db/
+      - ./.dev/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./.dev/dbs:/dbs
+      - ./.dev/data/mongo-db/data:/data/db
+
 
   mongo-express:
     image: mongo-express
