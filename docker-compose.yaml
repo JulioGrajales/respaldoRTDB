@@ -1,53 +1,60 @@
 version: '3.7'
 
 services:
-  mongo:
+  mongo1-rtdb:
+    container_name: mongo1-rtdb
     image: mongo:4.4.6-bionic
-    container_name: mongodb
-    #command: --bind_ip 0.0.0.0
+    command: mongod --replSet my-mongo-set
     ports:
-      - 27017:27017
+      - 27014:27017
     networks:
       - practicas
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
     volumes:
-      - ./.dev/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      #- ./.dev/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - ./.dev/dbs:/dbs
-      - ./.dev/data/mongo-db/data:/data/db
+      #- ./.dev/data/mongo-db/data:/data/db
 
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    depends_on:
-      - mongo
+  mongo2-rtdb:
+    container_name: mongo2-rtdb
+    image: mongo:4.4.6-bionic
+    command: mongod --replSet my-mongo-set
+    ports:
+      - 27015:27017
     networks:
       - practicas
+    volumes:
+      #- ./.dev/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./.dev/dbs:/dbs
+      #- ./.dev/data/mongo-db/data:/data/db
+  
+  mongo3-rtdb:
+    container_name: mongo3-rtdb
+    image: mongo:4.4.6-bionic
+    command: mongod --replSet my-mongo-set
     ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      - 27016:27017
+    networks:
+      - practicas
+    volumes:
+      #- ./.dev/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./.dev/dbs:/dbs
+      #- ./.dev/data/mongo-db/data:/data/db
 
-  real-time-db:
-    image: node:14-alpine3.13
-    build:
-      context: .
+  nodejs:
+    build: .
+    container_name: nodejs
     depends_on:
-      - mongo
+      - mongo1-rtdb
+      - mongo2-rtdb
+      - mongo3-rtdb
     environment:
       - SERVER_PORT=8090
-      - CONNECTIONSTRING=mongodb://mongodb:27017/c28_db
     ports:
       - 8090:8090
     networks:
       - practicas
     volumes:
       - ./:/srv/app
-    command: npm run debug
 
 networks:
   practicas:
-    name: practicas

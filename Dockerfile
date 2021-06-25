@@ -2,11 +2,10 @@ FROM node:14-alpine3.13
 
 WORKDIR /srv/app
 
-#COPY package.json .
-#COPY package-lock.json .
+COPY package*.json .
 
-#RUN npm install
+RUN npm install
 
 COPY . .
 
-CMD [ "node", "server.js" ]
+CMD [ "npm", "run", "dev" ]
