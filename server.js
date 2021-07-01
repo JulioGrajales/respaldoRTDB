@@ -5,7 +5,9 @@ const path = require('path');
 const http = require('http');
 const socketio = require('socket.io');
 
-const amenities = require('./models/amenities');
+const leadsModel = require('./models/amenities');
+
+const {agregarData,acomodarData} = require('./getData');
 
 const app = express();
 
@@ -35,29 +37,55 @@ async function run() {
   });
 
   // PRUEBAS
-  // amenities
 
-  io.on('connection', async socket => {
-    let amenidades = await amenities.find();
-    socket.emit('cargar amenidades', amenidades);
 
-    amenities.watch().
-      on('change', async change => {
-        //console.log("SUCEDIO ALGO EN LA DB ", data)
-        let amenidades;
-        switch (change.operationType) {
-          case "insert":
-            amenidades = await amenities.find();
-            socket.emit('cargar amenidades', amenidades);
-            break;
-          case "delete":
-            amenidades = await amenities.find();
-            socket.emit('cargar amenidades', amenidades);
-            break;
-        }
+  // agregarData(leadsModel).then(arrData => {
+    
+
+  //   const miData = acomodarData(arrData);
+  //   console.log('IMPRIMIENDO DATA');
+  //   console.log(miData);
+  // });
+
+
+  io.on('connection',socket => {
+    agregarData(leadsModel).then(arrData => {
+      const miData = acomodarData(arrData);
+      socket.emit('cargar amenidades', miData);
+    });
+
+    leadsModel.watch().
+      on('change', change => {
+        agregarData(leadsModel).then(arrData => {
+          const miData = acomodarData(arrData);
+          socket.emit('cargar amenidades', miData);
+        });
       });
 
   });
+
+
+  // io.on('connection', async socket => {
+  //   let amenidades = await amenities.find();
+  //   socket.emit('cargar amenidades', amenidades);
+
+  //   amenities.watch().
+  //     on('change', async change => {
+  //       //console.log("SUCEDIO ALGO EN LA DB ", data)
+  //       let amenidades;
+  //       switch (change.operationType) {
+  //         case "insert":
+  //           amenidades = await amenities.find();
+  //           socket.emit('cargar amenidades', amenidades);
+  //           break;
+  //         case "delete":
+  //           amenidades = await amenities.find();
+  //           socket.emit('cargar amenidades', amenidades);
+  //           break;
+  //       }
+  //     });
+
+  // });
 
 
 
