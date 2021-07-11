@@ -49,6 +49,7 @@ services:
       - mongo3-rtdb
     environment:
       - SERVER_PORT=8090
+      - ACCESS_TOKEN_SECRET=f74efc40c1dd1e7db6145cffe238066daae21797a920007845d17f9e5b530a90cf476a99778a15eafd741df144f9e45b795f8ff83c58507b09f15c13ba516a51
     ports:
       - 8090:8090
     networks:
