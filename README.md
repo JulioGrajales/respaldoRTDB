@@ -477,3 +477,35 @@ Abrimos el apartado de conexiones, y damos click en Crear, y colocamos la config
 4. Ejemplo de como se visualiza a la hora de conectarse al mongo. En este caso vemos una base de datos llamada 'capital28_dev':
 
 ![](./docs/collection_tree.png)
+
+
+## Comandos para iniciar el replica set
+
+1. Primero se ingresa este comando en otra terminal para acceder al shell de mongo dentro del docker
+
+```sh
+docker exec -it mongo1-rtdb mongo
+```
+2. despues dentro del shell de mongo se ingresa lo siguiente
+
+```sh
+config = config={_id:"my-mongo-set",members:[{_id:0,host:"mongo1-rtdb:27017"},{_id:1,host:"mongo2-rtdb:27017"},{_id:2,host:"mongo3-rtdb:27017"}]};
+```
+
+3. despues se ingresa el siguiente comando para iniciar el replica set
+
+```sh
+rs.initiate(config);
+```
+
+4. despues de esperar unos segundos los 3 contenedores de mongo deben de estar configurados para trabajar como replica set, ingresando estos comandos se puede revisar quien es el contenedor primario en algun momento, aveces es el primero, aveces es el segundo, aveces es el tercero, solo en el primario se puede insertar, actualizar y borrar, en los secundarios solo se puede consultar
+
+```sh
+docker exec -it mongo1-rtdb mongo
+docker exec -it mongo2-rtdb mongo
+docker exec -it mongo3-rtdb mongo
+```
+
+Si quedan dudas de como iniciar el replica set, en este video fue que me base para poder realizarlo
+
+https://youtu.be/PcUGdyiFyvo
