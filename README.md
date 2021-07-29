@@ -1,7 +1,7 @@
 
 # Realtime DB Project
 
-El objetivo del proyecto es implementar lo necesario de forma que podamos tener una base de datos en tiempo real, similar a lo que tiene Firebase de forma nativa. 
+TEST El objetivo del proyecto es implementar lo necesario de forma que podamos tener una base de datos en tiempo real, similar a lo que tiene Firebase de forma nativa. 
 
 Es decir, que los datos de la aplicación cambien en tiempo real sin necesidad de tener que recargar como actualmente debe hacerse.
 
