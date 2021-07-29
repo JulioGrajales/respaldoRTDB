@@ -2,15 +2,15 @@
 const mongoose = require('mongoose');
 const leadsModel = require('../models/leads');
 
-const obtenerDataLeadstats = async (reg_id,cb_id) => {
+const obtenerDataLeadstats = async (real_estate_group_id,contact_broker_id) => {
 
   
   let activeLeads = leadsModel.aggregate(
     [{
       '$match': {
         phase: { '$nin': ['discarded', 'finished'] },
-        real_estate_group_id: mongoose.Types.ObjectId(reg_id),
-        contact_broker_id: mongoose.Types.ObjectId(cb_id)
+        real_estate_group_id: mongoose.Types.ObjectId(real_estate_group_id),
+        contact_broker_id: mongoose.Types.ObjectId(contact_broker_id)
       }
     },
     { '$count': 'count' }]
@@ -23,8 +23,8 @@ const obtenerDataLeadstats = async (reg_id,cb_id) => {
       '$match': {
         comments: [],
         phase: { '$nin': ['discarded', 'finished'] },
-        real_estate_group_id: mongoose.Types.ObjectId(reg_id),
-        contact_broker_id: mongoose.Types.ObjectId(cb_id)
+        real_estate_group_id: mongoose.Types.ObjectId(real_estate_group_id),
+        contact_broker_id: mongoose.Types.ObjectId(contact_broker_id)
       }
     },
     { '$count': 'count' }]
@@ -37,8 +37,8 @@ const obtenerDataLeadstats = async (reg_id,cb_id) => {
     [{
       '$match': {
         phase: 'in-operation',
-        real_estate_group_id: mongoose.Types.ObjectId(reg_id),
-        contact_broker_id: mongoose.Types.ObjectId(cb_id)
+        real_estate_group_id: mongoose.Types.ObjectId(real_estate_group_id),
+        contact_broker_id: mongoose.Types.ObjectId(contact_broker_id)
       }
     },
     { '$group': { _id: { 'operation_phase': '$operation_phase' }, count: { $sum: 1 } } }]
@@ -52,8 +52,8 @@ const obtenerDataLeadstats = async (reg_id,cb_id) => {
     [{
       '$match': {
         phase: { '$nin': ['discarded', 'finished'] },
-        real_estate_group_id: mongoose.Types.ObjectId(reg_id),
-        contact_broker_id: mongoose.Types.ObjectId(cb_id)
+        real_estate_group_id: mongoose.Types.ObjectId(real_estate_group_id),
+        contact_broker_id: mongoose.Types.ObjectId(contact_broker_id)
       }
     },
     { '$group': { _id: { profile: '$profile' }, count: { $sum: 1 } } }]
@@ -69,8 +69,8 @@ const obtenerDataLeadstats = async (reg_id,cb_id) => {
         'postponed.is_postponed': true,
         'postponed.date_at': { '$lte': new Date('2021-06-29T04:59:59.000Z') },
         phase: { '$in': ['active', 'in-operation'] },
-        real_estate_group_id: mongoose.Types.ObjectId(reg_id),
-        contact_broker_id: mongoose.Types.ObjectId(cb_id)
+        real_estate_group_id: mongoose.Types.ObjectId(real_estate_group_id),
+        contact_broker_id: mongoose.Types.ObjectId(contact_broker_id)
       }
     },
     { '$count': 'count' }]
@@ -84,8 +84,8 @@ const obtenerDataLeadstats = async (reg_id,cb_id) => {
     [{
       '$match': {
         phase: { '$exists': true },
-        real_estate_group_id: mongoose.Types.ObjectId(reg_id),
-        contact_broker_id: mongoose.Types.ObjectId(cb_id)
+        real_estate_group_id: mongoose.Types.ObjectId(real_estate_group_id),
+        contact_broker_id: mongoose.Types.ObjectId(contact_broker_id)
       }
     },
     { '$group': { _id: { 'phase': '$phase' }, count: { $sum: 1 } } }]
@@ -99,8 +99,8 @@ const obtenerDataLeadstats = async (reg_id,cb_id) => {
     [{
       '$match': {
         phase: { '$nin': ['discarded', 'finished'] },
-        real_estate_group_id: mongoose.Types.ObjectId(reg_id),
-        contact_broker_id: mongoose.Types.ObjectId(cb_id)
+        real_estate_group_id: mongoose.Types.ObjectId(real_estate_group_id),
+        contact_broker_id: mongoose.Types.ObjectId(contact_broker_id)
       }
     },
     { '$group': { _id: { 'phase': '$tracking_phase' }, count: { $sum: 1 } } }]

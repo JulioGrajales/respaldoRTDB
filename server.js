@@ -6,6 +6,7 @@ const socketio = require('socket.io');
 const morgan = require('morgan');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 const app = express();
 
@@ -22,34 +23,37 @@ app.set('json spaces', 2);
 app.use(morgan('dev'));
 app.use(cors({ origin: "*" }));
 
-app.use(rutas);
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+//app.use(rutas);
 
 const server = http.createServer(app);
 const io = socketio(server, {
   cors: { origin: "*" }
 });
 
-io.use((socket, next) => {
+// io.use((socket, next) => {
 
-  if (socket.handshake.query.apiName
-    && socket.handshake.query.real_estate_group_id
-    && socket.handshake.query.contact_broker_id) {
-    next();
-  } else {
-    next(new Error('faltan parametros'));
-  }
-});
+//   if (socket.handshake.query.apiName
+//     && socket.handshake.query.real_estate_group_id
+//     && socket.handshake.query.contact_broker_id) {
+//     next();
+//   } else {
+//     next(new Error('faltan parametros'));
+//   }
+// });
 
-io.use((socket,next) => {
-  if(socket.handshake.query.token){
-    jwt.verify(socket.handshake.query.token,process.env.ACCESS_TOKEN_SECRET,(err,decoded)=>{
-      if (err) return next(new Error('error de autenticacion'));
-      next();
-    });
-  }else{
-    next(new Error('falta token'));
-  }
-});
+// io.use((socket,next) => {
+//   if(socket.handshake.query.token){
+//     jwt.verify(socket.handshake.query.token,process.env.ACCESS_TOKEN_SECRET,(err,decoded)=>{
+//       if (err) return next(new Error('error de autenticacion'));
+//       next();
+//     });
+//   }else{
+//     next(new Error('falta token'));
+//   }
+// });
 
 run().catch(error => console.error(error));
 
@@ -64,7 +68,9 @@ async function run() {
   });
 
   io.on('connection', async socket => {
-    const {real_estate_group_id,contact_broker_id} = socket.handshake.query;
+    //const {real_estate_group_id,contact_broker_id} = socket.handshake.query;
+    const real_estate_group_id = '5e9a2df024535649bdc51f54';
+    const contact_broker_id = '5db30d7c0a23f12a4f069572';
     const data = await procesarData(
       real_estate_group_id,contact_broker_id
     );
